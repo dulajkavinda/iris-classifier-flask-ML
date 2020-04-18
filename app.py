@@ -1,56 +1,51 @@
-import os
-from flask import Flask, jsonify, request
-from flask_restful import Api, Resource
-from model.Train import train_model
-from sklearn.externals import joblib
-import json
-
+# app.py
+from flask import Flask, request, jsonify
 app = Flask(__name__)
-api = Api(app)
 
-if not os.path.isfile('iris-model.model'):
-    train_model()
+@app.route('/getmsg/', methods=['GET'])
+def respond():
+    # Retrieve the name from url parameter
+    name = request.args.get("name", None)
 
-model = joblib.load('iris-model.model')
+    # For debugging
+    print(f"got name {name}")
 
-class MakePrediction(Resource):
-    @staticmethod
-    def post():
-        posted_data = request.get_json()
-        sepal_length = posted_data['sepal_length']
-        sepal_width = posted_data['sepal_width']
-        petal_length = posted_data['petal_length']
-        petal_width = posted_data['petal_width']
+    response = {}
 
-        prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])[0]
-        if prediction == 0:
-            predicted_class = 'Iris-setosa'
-        elif prediction == 1:
-            predicted_class = 'Iris-versicolor'
-        else:
-            predicted_class = 'Iris-virginica'
+    # Check if user sent a name at all
+    if not name:
+        response["ERROR"] = "no name found, please send a name."
+    # Check if the user entered a number not a name
+    elif str(name).isdigit():
+        response["ERROR"] = "name can't be numeric."
+    # Now the user entered a valid name
+    else:
+        response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
 
+    # Return the response in json format
+    return jsonify(response)
+
+@app.route('/post/', methods=['POST'])
+def post_something():
+    param = request.form.get('name')
+    print(param)
+    # You can add the test cases you made in the previous function, but in our case here you are just testing the POST functionality
+    if param:
         return jsonify({
-            'Prediction': predicted_class
+            "Message": "Welcome {name} to our awesome platform!!",
+            # Add this option to distinct the POST request
+            "METHOD" : "POST"
         })
-    
-def set_default(obj):
-    if isinstance(obj, set):
-        return list(obj)
-    raise TypeError
+    else:
+        return jsonify({
+            "ERROR": "no name found, please send a name."
+        })
 
-    
-class GetHello(Resource):
-    @staticmethod
-    def get():
-         return jsonify(
-            json.dumps('hello')
-         )
-
-
-api.add_resource(MakePrediction, '/predict')
-api.add_resource(GetHello, '/hi')
-
+# A welcome message to test our server
+@app.route('/')
+def index():
+    return "<h1>Welcome to our server !!</h1>"
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    # Threaded option to enable multiple instances for multiple user access support
+    app.run(threaded=True, port=5000)
