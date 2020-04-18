@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 from model.Train import train_model
 from sklearn.externals import joblib
+import json
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,7 +12,6 @@ if not os.path.isfile('iris-model.model'):
     train_model()
 
 model = joblib.load('iris-model.model')
-
 
 class MakePrediction(Resource):
     @staticmethod
@@ -34,12 +34,18 @@ class MakePrediction(Resource):
             'Prediction': predicted_class
         })
     
+def set_default(obj):
+    if isinstance(obj, set):
+        return list(obj)
+    raise TypeError
+
+    
 class GetHello(Resource):
     @staticmethod
     def get():
-        return jsonify({
-            'Hello World'
-        })
+         return jsonify(
+            json.dumps('hello')
+         )
 
 
 api.add_resource(MakePrediction, '/predict')
