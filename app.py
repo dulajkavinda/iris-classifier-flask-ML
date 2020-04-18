@@ -33,9 +33,17 @@ class MakePrediction(Resource):
         return jsonify({
             'Prediction': predicted_class
         })
+    
+class GetHello(Resource):
+    @staticmethod
+    def get():
+        return jsonify({
+            'Hello World'
+        })
 
 
 api.add_resource(MakePrediction, '/predict')
+api.add_resource(GetHello, '/hi')
 
 
 if __name__ == '__main__':
