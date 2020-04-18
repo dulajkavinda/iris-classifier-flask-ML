@@ -1,30 +1,35 @@
 # app.py
+import os
 from flask import Flask, request, jsonify
 app = Flask(__name__)
+from model.Train import train_model
+from sklearn.externals import joblib
+
+if not os.path.isfile('iris-model.model'):
+    train_model()
+
+model = joblib.load('iris-model.model')
 
 
-@app.route('/getmsg/', methods=['GET'])
+@app.route('/predict/', methods=['POST'])
 def respond():
-    # Retrieve the name from url parameter
-    name = request.args.get("name", None)
 
-    # For debugging
-    print(f"got name {name}")
+        sepal_length = request.form.get("sepal_length", type=float)
+        sepal_width = request.form.get("sepal_width",  type=float)
+        petal_length = request.form.get("petal_length",  type=float)
+        petal_width = request.form.get("petal_width",  type=float)
 
-    response = {}
+        prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])[0]
+        if prediction == 0:
+            predicted_class = 'Iris-setosa'
+        elif prediction == 1:
+            predicted_class = 'Iris-versicolor'
+        else:
+            predicted_class = 'Iris-virginica'
 
-    # Check if user sent a name at all
-    if not name:
-        response["ERROR"] = "no name found, please send a name."
-    # Check if the user entered a number not a name
-    elif str(name).isdigit():
-        response["ERROR"] = "name can't be numeric."
-    # Now the user entered a valid name
-    else:
-        response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
-
-    # Return the response in json format
-    return jsonify(response)
+        return jsonify({
+            'Prediction': predicted_class
+        })
 
 @app.route('/post/', methods=['POST'])
 def post_something():
