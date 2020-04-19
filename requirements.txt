@@ -8,3 +8,4 @@ pandas>=0.23.3
 requests==2.20.0
 scikit-learn>=0.19.1
 gunicorn==19.9.0
+Flask-RESTful==0.3.8
