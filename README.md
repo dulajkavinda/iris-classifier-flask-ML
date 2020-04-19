@@ -2,10 +2,10 @@
 ## IRIS Data set prediction using machine learning and make web app using Flask and deploy into Heroku
 
 ## Heroku : 
-  - URL link [Heading link](https://iris-predict-duka.herokuapp.com")
+  - URL link [https://iris-predict-duka.herokuapp.com](https://iris-predict-duka.herokuapp.com")
   
 ### Endpoints
-  - POST('/predict') :link [Heading link](https://iris-predict-duka.herokuapp.com/predict")
+  - POST('/predict') :link [https://iris-predict-duka.herokuapp.com/predict](https://iris-predict-duka.herokuapp.com/predict")
   
 ### JSON Object
   
