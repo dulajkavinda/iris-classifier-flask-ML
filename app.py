@@ -1,6 +1,14 @@
 # app.py
+import os
+from model.Train import train_model
+from sklearn.externals import joblib
 from flask import Flask, request, jsonify
 app = Flask(__name__)
+
+if not os.path.isfile('iris-model.model'):
+    train_model()
+
+model = joblib.load('iris-model.model')
 
 
 @app.route('/getmsg/', methods=['GET'])
