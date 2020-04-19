@@ -1,6 +1,6 @@
 # app.py
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,reqparse
 app = Flask(__name__)
 from model.Train import train_model
 from sklearn.externals import joblib
@@ -13,11 +13,13 @@ model = joblib.load('iris-model.model')
 
 @app.route('/predict/', methods=['POST'])
 def respond():
-
-        sepal_length = request.form.get("sepal_length", type=float)
-        sepal_width = request.form.get("sepal_width",  type=float)
-        petal_length = request.form.get("petal_length",  type=float)
-        petal_width = request.form.get("petal_width",  type=float)
+        
+        request.get_json(force=True)
+        args = reqparse.parse_args()
+        sepal_length = float(args['sepal_length'])
+        sepal_width = float(args['sepal_width'])
+        petal_length = float(args['petal_length'])
+        petal_width = float(args['petal_width'])
 
         prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])[0]
         if prediction == 0:
