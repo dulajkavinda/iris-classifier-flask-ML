@@ -1,5 +1,4 @@
 # Iris Prediction using Flast k and Decision Tree Classifier
-## IRIS Data set prediction using machine learning and make web app using Flask and deploy into Heroku
 
 ## Heroku : 
   - URL link [https://iris-predict-duka.herokuapp.com](https://iris-predict-duka.herokuapp.com")
