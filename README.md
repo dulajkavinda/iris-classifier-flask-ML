@@ -1,4 +1,4 @@
-# Iris Prediction using 🌺 Flast k and Decision Tree Classifier
+# Iris Prediction using flask k and Decision Tree Classifier
 
 ## Heroku : 
   - URL link [https://iris-predict-duka.herokuapp.com](https://iris-predict-duka.herokuapp.com")
